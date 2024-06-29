@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corndel Restaurant Booking</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Corndel Restaurant</h1>
+    </header>
+    <main>
+        <section id="booking-section">
+            <h2>Make a Reservation</h2>
+            <form id="bookingForm">
+                <label for="date">Select a date:</label>
+                <input type="date" id="date" name="date" required>
+                <button type="submit">Book</button>
+            </form>
+            <p id="message"></p>
+        </section>
+        <section id="calendar-section">
+            <h2>Upcoming Bookings</h2>
+            <div id="calendarData"></div>
+        </section>
+    </main>
+    <script src="/static/script.js"></script>
+</body>
+</html>
