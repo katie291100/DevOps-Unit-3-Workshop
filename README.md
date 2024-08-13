@@ -21,28 +21,30 @@ This will warm up our muscles for understanding APIs, parsing documentation, wor
 #### Step 1: Get the API key
 APIs are sometimes paid, sometimes free. Some of the APIs that are free to use still require you to sign up for an account, so they can ensure the service is not being abused, and can provide fair service to everyone. 
 
-The Transport API is one such service! If you didn't already make an account with the Transport API as part of the eLearning, let's get an account, so we can get an API key. You can do this by:
+The Transport for London (TfL) API is one such service! Let's get an account now, so we can get an API key. You can do this by:
 
-- Visiting https://www.transportapi.com/
-- Clicking "Developer" in the top right
-- Clicking "Sign up" and following the instructions
+- Visiting https://api.tfl.gov.uk/
+- Clicking "Register" and "Register" again!
+- Working through the "Sign Up" form & email verification
 
-You will end up with an app list. Sometimes, APIs give a key to a user, but sometimes they give API keys to individual apps. This means that if you had multiple apps using the same API, you could track how much each app was using the API, and shut down an API key for a misbehaving app without affecting the others. 
+Once you sign in, visit the "Products" page and enter a new Product Subscription name. Sometimes, APIs give a key to a user, but sometimes they give API keys to individual apps. This means that if you had multiple apps using the same API, you could track how much each app was using the API, and shut down an API key for a misbehaving app without affecting the others.
 
-When you create your account, you should see that such an app has already been created. It might have a name like "Personal's App". It will have an `app_id` and an `app_key`. These are the keys you need to use the API. So, in this case (as it is sometimes), an API key is actually two keys!
+Now you have created a subscription, it will show up under your Profile with a pair of `app_key`s. These are the keys you need to use the API. Can you think why they have provided a primary and a secondary?
 
 API keys are intended to be kept secret - they're like passwords. If someone else gets a hold of your API key, they can masquerade as you while using a service. If they abuse the service in your name, you'll get in trouble. So protect these keys like you would passwords! 
 
 Accordingly, we will avoid hardcoding API keys in our code - we don't want them to get committed to version control. 
 
-There are other things we can do to get API keys into our code without putting them in the code itself. For example, we can store the `app_id` and `app_key` in files that are not committed to version control, and have our code read them in when we need them.
+There are other things we can do to get API keys into our code without putting them in the code itself. For example, we can store the `app_key` in files that are not committed to version control, and have our code read them in when we need them.
 
 We're getting ahead of ourselves. Let's use the keys we have in the terminal before we worry about code.
 
 #### Step 2: Finding the right endpoint
-We have access to the Transport API. We just need to find the right endpoint to use. The documentation for the various APIs offered is here: https://developer.transportapi.com/
+We have access to the TfL API. We just need to find the right endpoint to use. The documentation for the various APIs offered is here: https://api-portal.tfl.gov.uk/api-details
 
 We're looking for an endpoint that will get us the next departures from a bus stop. We can worry about being able to let the user choose an arbitrary bus stop later. For now, let's just get the next departures from a bus stop with a known ID: `490012553B`.
+
+> Hint: Bus stops are an example of a StopPoint in TfL jargon!
 
 Once you've found the right endpoint, note the 4 pieces of information we look for in API documentation: the URL to hit, the request method, the parameters to pass in, and the format of the response.
 
@@ -57,16 +59,15 @@ curl https://www.example.com
 But we will need to use the documentation for the API we want to use to find what URL to specify, the request method, and the parameters to pass in.
 That could result in us needing to make a request that looks like this:
 ```
-curl -X GET "https://api.transportapi.com/some_endpoint?some_parameters"
+curl -X GET "https://api.tfl.gov.uk/some_endpoint?some_parameters"
 ```
 
 You will need to join up the information from the API documentation with how to use the `curl` command.
 The official curl documentation is here: https://curl.se/docs/manpage.html 
 But there are also other resources, such as quick references or cheat sheets. For example, this one: https://devhints.io/curl
 
-There's one more thing we need to do: since the Transport API requires authentication, we need to provide authentication parameters, as per the instructions: https://developer.transportapi.com/docs#auth
+There's one more thing we need to do: since the TfL API requires authentication, we need to provide authentication parameters, as per the instructions (https://api-portal.tfl.gov.uk/) so provide the `app_key` as a query parameter. 
 
-You can either provide the `app_id` and `app_key` as query parameters, or as headers. 
 Once you've run your curl command, you should see a response from the API. It might be a bit of a mess, but it should be a mess that you can read!
 
 ![curl response](images/curl-example.png)
@@ -138,11 +139,39 @@ You can run the application by:
 2. Installing the necessary libraries by running `pip install -r requirements.txt`
 3. Running the application by running `python app.py`
 
+> If using ACG, you will need to install pip with `sudo apt install python3-pip`
+
 You should see output that looks like this:
 
 ![running the API](images/restaurant-running.png)
 
 You should also be able to access the website by navigating to `http://localhost:5000` in your browser.
+
+> If you're using ACG there are a couple of extra steps to access that - open the spoiler section below to work through those!
+
+<details> <summary> Running the Flask app on ACloudGuru </summary>
+
+If you're running the app on ACG, then we need to expose it to the internet so that you can connect from your machine. This involves two main steps:
+
+1. Open a port in the firewall (we'll use `8000`) so that ACG doesn't block the site:
+```
+sudo ufw allow 8000
+```
+
+2. Run the site on the host `0.0.0.0` and on port 8000, by updating the final `app.run(..)` line in `app.py` to look like below:
+```python
+    app.run(debug=True, host = "0.0.0.0", port = 8000)
+```
+
+This is because by default the `localhost` address (`127.0.0.1`) isn't accessible to other machines. `0.0.0.0` by contrast tells Flask to be available to other machines in the network.
+
+You can now try running the app with `python app.py` as before, and access the site at your server's IP: `http://<ip_here>:8000`.
+
+</details>
+
+------
+
+#### Explore Flask
 
 This API and website is powered by Flask. You can read more about Flask here: https://flask.palletsprojects.com/en/2.3.x/ - have a look at the Quickstart section to get a feel for how Flask applications are structured, and then compare it to the code in the "restaurant" directory! How does this website work? What does the code do? What are the other files, what are they for, and when are they used?
 
@@ -162,7 +191,7 @@ The backend is the Flask application that you're running. The frontend is the HT
 
 Open up the Network tab in your browser, and watch what happens when you make a successful booking - the frontend sends a POST request to the backend, and the backend responds with a success message.
 
-Does that sound familiar? It should! It's the same thing that happens when you interact with an API! In the same way that you just made a Python application that interacts with the Transport API, this is a website that uses Javascript to interact with the local API running with Flask.
+Does that sound familiar? It should! It's the same thing that happens when you interact with an API! In the same way that you just made a Python application that interacts with the TfL API, this is a website that uses Javascript to interact with the local API running with Flask.
 
 With that in mind, keeping the Network tab open, try and make a booking for a date within the next 7 days. You might notice that unlike the successful booking, the failed booking doesn't actually send a request to the backend.
 
@@ -173,11 +202,11 @@ When the website performs a check like this, it's called "client-side validation
 
 However, it's also important to remember that the frontend is not secure. It's possible to manipulate the frontend to send requests that the frontend doesn't want to send. This is why it's important to have "server-side validation" as well - the backend should always check the data it receives, even if the frontend has already checked it.
 
-Since our backend API doesn't check the date, we can make a booking for a date within the next 7 days by sending a request directly to the backend. This is just as easy as making a request to the Transport API!
-Remember, the frontend is just a user of the API - it's not special, it's not magic. It's just another client, like the Python application you made earlier. So you can make a curl request to the backend, just like you did with the Transport API. 
+Since our backend API doesn't check the date, we can make a booking for a date within the next 7 days by sending a request directly to the backend. This is just as easy as making a request to the TfL API!
+Remember, the frontend is just a user of the API - it's not special, it's not magic. It's just another client, like the Python application you made earlier. So you can make a curl request to the backend, just like you did with the TfL API. 
 As with other APIs, you'd be tempted to note the 4 pieces of information we look for in API documentation: the URL to hit, the request method, the parameters to pass in, and the format of the response. This is almost exactly what we're going to do, except that in this case we don't need the format of the response. 
 
-Go to the Network tab, make a successful booking, and note the 3 pieces of information we do want. Note that one difference to the call we made earlier to the Transport API is that this time, we're going to need to send some data in the body of the request. Check the cheatsheet for curl to see how to do this!
+Go to the Network tab, make a successful booking, and note the 3 pieces of information we do want. Note that one difference to the call we made earlier to the TfL API is that this time, we're going to need to send some data in the body of the request. Check the cheatsheet for curl to see how to do this!
 
 Once you've made a successful booking using curl, you should see that the API responds with "Booking successful!". You can check that this has happened as you've expected by refreshing the web page and checking the list of upcoming bookings (and/or the calendar preview). 
 
@@ -226,7 +255,7 @@ Modify your web app so that the user can specify a route in the URL. For example
 We've been returning plaintext so far, but we are intending for this data endpoint to be an API, and APIs typically return JSON (or something else computer-readable). Do this by using the `jsonify` function in Flask. You can read more about it, or use the automatic conversion explained here: https://flask.palletsprojects.com/en/2.3.x/quickstart/#apis-with-json
 
 ### Stretch D: Bus departures as a HTML website
-We've now built an API (in Flask) that itself uses another API (the Transport API) to get the next departures from a bus stop. 
+We've now built an API (in Flask) that itself uses another API (the TfL API) to get the next departures from a bus stop. 
 
 We are now going to build a website that uses this Flask API we just made to display the next departures from a bus stop.
 
@@ -241,7 +270,7 @@ You now have:
 - A website that uses this API to display the next departures from a bus stop
 
 But you could go so much further! Here are some ideas:
-- Make the website more functional: Use more of the Transport API's endpoints to get more done - maybe get the user to supply their latitude and longitude, so that you can get the nearest bus stop to them, and then get the next departures from that bus stop! Or use the Postcodes API, and ask the user for their postcode instead of a latitude and longitude!
+- Make the website more functional: Use more of the TfL API's endpoints to get more done - maybe get the user to supply their latitude and longitude, so that you can get the nearest bus stop to them, and then get the next departures from that bus stop! Or use the Postcodes API, and ask the user for their postcode instead of a latitude and longitude!
 - Make the website look nicer: You can do this by using CSS. You can read more about CSS here: https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps
 - Make the website more interactive: You can do this by using JavaScript. You can read more about JavaScript here: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps
 
