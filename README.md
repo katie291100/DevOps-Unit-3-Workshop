@@ -138,11 +138,39 @@ You can run the application by:
 2. Installing the necessary libraries by running `pip install -r requirements.txt`
 3. Running the application by running `python app.py`
 
+> If using ACG, you will need to install pip with `sudo apt install python3-pip`
+
 You should see output that looks like this:
 
 ![running the API](images/restaurant-running.png)
 
 You should also be able to access the website by navigating to `http://localhost:5000` in your browser.
+
+> If you're using ACG there are a couple of extra steps to access that - open the spoiler section below to work through those!
+
+<details> <summary> Running the Flask app on ACloudGuru </summary>
+
+If you're running the app on ACG, then we need to expose it to the internet so that you can connect from your machine. This involves two main steps:
+
+1. Open a port in the firewall (we'll use `8000`) so that ACG doesn't block the site:
+```
+sudo ufw allow 8000
+```
+
+2. Run the site on the host `0.0.0.0` and on port 8000, by updating the final `app.run(..)` line in `app.py` to look like below:
+```python
+    app.run(debug=True, host = "0.0.0.0", port = 8000)
+```
+
+This is because by default the `localhost` address (`127.0.0.1`) isn't accessible to other machines. `0.0.0.0` by contrast tells Flask to be available to other machines in the network.
+
+You can now try running the app with `python app.py` as before, and access the site at your server's IP: `http://<ip_here>:8000`.
+
+</details>
+
+------
+
+#### Explore Flask
 
 This API and website is powered by Flask. You can read more about Flask here: https://flask.palletsprojects.com/en/2.3.x/ - have a look at the Quickstart section to get a feel for how Flask applications are structured, and then compare it to the code in the "restaurant" directory! How does this website work? What does the code do? What are the other files, what are they for, and when are they used?
 
