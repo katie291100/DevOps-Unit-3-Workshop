@@ -14,7 +14,7 @@ The objectives today are:
 ### Pre-flight checks
 We're going to warm up the knowledge and skills we've developed in the eLearning modules about working with APIs.
 
-Let's start by making a console application that reads out the next departures from a given bus stop.
+Let's start by making a console application that reads out the next arrivals at a given bus stop.
 
 This will warm up our muscles for understanding APIs, parsing documentation, working out which endpoints to use, and just getting a handle on APIs in general.
 
@@ -42,7 +42,7 @@ We're getting ahead of ourselves. Let's use the keys we have in the terminal bef
 #### Step 2: Finding the right endpoint
 We have access to the TfL API. We just need to find the right endpoint to use. The documentation for the various APIs offered is here: https://api-portal.tfl.gov.uk/api-details
 
-We're looking for an endpoint that will get us the next departures from a bus stop. We can worry about being able to let the user choose an arbitrary bus stop later. For now, let's just get the next departures from a bus stop with a known ID: `490012553B`.
+We're looking for an endpoint that will get us the next arrivals at a bus stop. We can worry about being able to let the user choose an arbitrary bus stop later. For now, let's just get the next arrivals at a bus stop with a known ID: `490012553B`.
 
 > Hint: Bus stops are an example of a StopPoint in TfL jargon!
 
@@ -70,18 +70,18 @@ There's one more thing we need to do: since the TfL API requires authentication,
 
 Once you've run your curl command, you should see a response from the API. It might be a bit of a mess, but it should be a mess that you can read!
 
-![curl response](images/curl-example.png)
+![curl response](images/curl-example-tfl.png)
 
 You can see that the response is a JSON object that matches up to the documentation we read. This is a good sign that we're on the right track!
 
 We can use the `jq` command to make the JSON response more readable. You probably have `jq` already on your machine (if you don't, you can install `jq` by following the instructions here: https://stedolan.github.io/jq/download/). Pipe to `jq` and you'll see the response in a more readable format:
 
-![curl response with jq](images/curl-example-jq.png)
+![curl response with jq](images/curl-example-jq-tfl.png)
 
 #### Step 4: Making an equivalent Python application
 Now that we're successfully working with the API in the terminal, let's make a Python application that does the same thing.
 
-Create a new file called `bus-departures.py`, start with a simple print of "Hello World" to check everything is working, then get started with making your API request!
+Create a new file called `bus-arrivals.py`, start with a simple print of "Hello World" to check everything is working, then get started with making your API request!
 
 We can use the `requests` library to make HTTP requests in Python. The documentation for the `requests` library is here: https://docs.python-requests.org/en/master/
 
@@ -91,15 +91,17 @@ You can import the `requests` library in your Python code by adding `import requ
 
 You can make a GET request in Python using the `requests.get` function. You can pass in the URL and any parameters as arguments to the function. All of this information and additional guidance is available in the Quickstart section of the documentation: https://docs.python-requests.org/en/latest/user/quickstart/
 
-When you're done, you'll have a Python app that, once run, will output the next departures from the bus stop with ID `490012553B`. You can decide what format to output the information in! 
+When you're done, you'll have a Python app that, once run, will output the next arrivals at the bus stop with ID `490012553B`. You can decide what format to output the information in! 
 
 At its most basic, you could output the information in the same format as the JSON response you got from the API.
 
-![python output 1](images/python-example-1.png)
+> Hint: you may want to use [the `json` method on the response](https://docs.python-requests.org/en/latest/user/quickstart/#json-response-content) to convert the response text into python data structures.
+
+![python output 1](images/python-example-1-tfl.png)
 
 But you could also format it in a more human-readable way, or be a bit more adventurous by creating a little ASCII-art table!
 
-![python output 2](images/python-example-2.png)
+![python output 2](images/python-example-2-tfl.png)
 
 #### Step 5: Expand your app
 Once you've got the basic app working, you can expand it in a number of ways. For now, we'd like you to get your application to accept either a command line parameter, or ask for user input, in order to filter the results to only show buses for a certain route.
@@ -235,29 +237,29 @@ Once you've added the check, try making the same `curl` request that attempts to
 You've now fixed the issue! Now you know how to use APIs, how to spot weaknesses, and how to resolve them!
 
 ## Stretch goals
-### Stretch A: Bus departures as a web app
-We just wrote a Python application that gets the next departures from a bus stop. We then modified that Python application to display the next departures from a bus stop, but only for a certain route specified by the user.
+### Stretch A: Bus arrivals as a web app
+We just wrote a Python application that gets the next arrivals at a bus stop. We then modified that Python application to display the next arrivals at a bus stop, but only for a certain route specified by the user.
 
 Now, instead of running this app in the terminal, let's have an app that runs a web server that can be visited by the browser. 
 
 1. Create a new basic Flask app. Use the quickstart guide: https://flask.palletsprojects.com/en/2.3.x/quickstart/#
-2. Much like the "A Minimal Application" example, you only need one route to be served, and that's `/`. Instead of returning "Hello, World!", return the next departures from a bus stop. This code will look very similar to the Python code you wrote earlier to get the next departures from a bus stop!
-3. Test this API endpoint using `curl`. You should be able to make a `curl` request to your Flask app, and get back the next departures from a bus stop.
-4. Test this API endpoint using a web browser. You should be able to visit your Flask app in a web browser, and see the next departures from a bus stop - this time you'll see it as plain text inside your browser window. It should remind you of the mad libs application we deployed in our very first workshop!
+2. Much like the "A Minimal Application" example, you only need one route to be served, and that's `/`. Instead of returning "Hello, World!", return the next arrivals at a bus stop. This code will look very similar to the Python code you wrote earlier to get the next arrivals at a bus stop!
+3. Test this API endpoint using `curl`. You should be able to make a `curl` request to your Flask app, and get back the next arrivals at a bus stop.
+4. Test this API endpoint using a web browser. You should be able to visit your Flask app in a web browser, and see the next arrivals at a bus stop - this time you'll see it as plain text inside your browser window. It should remind you of the mad libs application we deployed in our very first workshop!
 
-### Stretch B: Bus departures as a web app with user input
-Since the original code you wrote to get the next departures from a bus stop allowed the user to specify a route, let's allow the user to specify a route in the web app as well!
+### Stretch B: Bus arrivals as a web app with user input
+Since the original code you wrote to get the next arrivals at a bus stop allowed the user to specify a route, let's allow the user to specify a route in the web app as well!
 
-Modify your web app so that the user can specify a route in the URL. For example, if the user visits `http://localhost:5000/123`, they should see the next departures from the bus stop with ID `490012553B`, but only for route `123`. You can see how to do this by reading the Flask documentation: https://flask.palletsprojects.com/en/2.3.x/quickstart/#variable-rules 
+Modify your web app so that the user can specify a route in the URL. For example, if the user visits `http://localhost:5000/123`, they should see the next arrivals at the bus stop with ID `490012553B`, but only for route `123`. You can see how to do this by reading the Flask documentation: https://flask.palletsprojects.com/en/2.3.x/quickstart/#variable-rules 
 
 
-### Stretch C: Bus departures as a web app with user input and returning JSON instead of plaintext
+### Stretch C: Bus arrivals as a web app with user input and returning JSON instead of plaintext
 We've been returning plaintext so far, but we are intending for this data endpoint to be an API, and APIs typically return JSON (or something else computer-readable). Do this by using the `jsonify` function in Flask. You can read more about it, or use the automatic conversion explained here: https://flask.palletsprojects.com/en/2.3.x/quickstart/#apis-with-json
 
-### Stretch D: Bus departures as a HTML website
-We've now built an API (in Flask) that itself uses another API (the TfL API) to get the next departures from a bus stop. 
+### Stretch D: Bus arrivals as a HTML website
+We've now built an API (in Flask) that itself uses another API (the TfL API) to get the next arrivals at a bus stop. 
 
-We are now going to build a website that uses this Flask API we just made to display the next departures from a bus stop.
+We are now going to build a website that uses this Flask API we just made to display the next arrivals at a bus stop.
 
 Here's how to approach it:
 1. Get Flask to serve a basic HTML page when you visit the root URL. Read more of the Flask documentation, and also read the restaurant Flask code, and see if you can suss out how it works. If you need help with writing some HTML, try reading up on it using guides like this: https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics
@@ -266,11 +268,11 @@ Here's how to approach it:
 
 ### Stretch E: Further improvements to the website
 You now have: 
-- A Flask API that gets the next departures from a bus stop
-- A website that uses this API to display the next departures from a bus stop
+- A Flask API that gets the next arrivals at a bus stop
+- A website that uses this API to display the next arrivals at a bus stop
 
 But you could go so much further! Here are some ideas:
-- Make the website more functional: Use more of the TfL API's endpoints to get more done - maybe get the user to supply their latitude and longitude, so that you can get the nearest bus stop to them, and then get the next departures from that bus stop! Or use the Postcodes API, and ask the user for their postcode instead of a latitude and longitude!
+- Make the website more functional: Use more of the TfL API's endpoints to get more done - maybe get the user to supply their latitude and longitude, so that you can get the nearest bus stop to them, and then get the next arrivals at that bus stop! Or use the Postcodes API, and ask the user for their postcode instead of a latitude and longitude!
 - Make the website look nicer: You can do this by using CSS. You can read more about CSS here: https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps
 - Make the website more interactive: You can do this by using JavaScript. You can read more about JavaScript here: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps
 
