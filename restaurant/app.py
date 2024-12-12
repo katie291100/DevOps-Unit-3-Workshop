@@ -17,6 +17,10 @@ def get_bookings():
 def book():
     data = request.json
     booking_date = datetime.strptime(data['date'], '%Y-%m-%d')
+
+    if (booking_date - datetime.now()).days < 7:
+        return jsonify({"message": "Booking date should not be within the next 7 days"}), 400
+    
     bookings.append(booking_date)
     return jsonify({"message": "Booking successful!"}), 200
 

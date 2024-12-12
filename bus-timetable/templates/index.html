@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Timetables</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main>
+        <section class="bg-image bg-white/90 w-90 m-auto">
+            <h1 class="mb-4 text-4xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl mx-auto center text-center">Timetable for Busses</h1>
+            <form id="selectStop">
+                <input type="text" id="postcode" name="postcode" placeholder="Enter postcode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4" required>
+
+                <select id="stop_id" name="stop_id" class = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4" required>
+                    <option value="" disabled selected class="">Select a stop</option>
+                    <!-- Options will be populated here -->
+                </select>
+            </form>
+            <p id="message"></p>
+            <div class="bg-white opacity-95 ">
+                <table id="data-table" border="1" class="table-auto bg-white opacity-100 center m-auto w-full text-sm text-left rtl:text-right text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Expected Arrival</th>
+                            <th scope="col" class="px-6 py-3">Bus No.</th>
+                            <th scope="col" class="px-6 py-3">Destination</th>
+                            <!-- Add more headers as needed -->
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white border-b">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>
